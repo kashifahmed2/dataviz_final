@@ -167,11 +167,21 @@ df_ind$value <- as.numeric(df_ind$value)
 df_ind <- df_ind %>% group_by(year, variable, region) %>%
   summarise(value = mean(value, na.rm = TRUE))
 
+df_ind$variable[df_ind$variable=="agri_growth"] <- "Agriculture"
+df_ind$variable[df_ind$variable=="exports_growth"] <- "Exports"
+df_ind$variable[df_ind$variable=="imports_growth"] <- "Imports"
+df_ind$variable[df_ind$variable=="industry_growth"] <- "Industry"
+df_ind$variable[df_ind$variable=="manufacturing_growth"] <- "Manufacturing"
+df_ind$variable[df_ind$variable=="services_growth"] <- "Services"
+
+
 ggplot(df_ind, aes(x = year, y = value, color = factor(region))) +
   geom_line() +
   geom_hline(yintercept=0,linetype=3) +
+  scale_x_continuous(labels = label_number(accuracy = 1)) +
+  scale_y_continuous(limits=c(-20, 20)) +
   labs(title = "Sub-Saharan African Growth in the 2010s",
-       subtitle = "Comparing Sector",
+       subtitle = "Comparing Sectors",
        caption = "Source: World Bank Data",
        x = "Year",
        y = "Annual % Growth",
